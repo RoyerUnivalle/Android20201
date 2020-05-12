@@ -35,6 +35,13 @@
         android:text="Pintar" />
 
     <Button
+        android:id="@+id/btnConsultar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="consultar"
+        android:text="Consultar" />
+
+    <Button
         android:id="@+id/btnNavegar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
