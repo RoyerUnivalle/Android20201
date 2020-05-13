@@ -42,10 +42,23 @@
         android:text="Consultar" />
 
     <Button
+        android:id="@+id/btnService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="llamarServicio"
+        android:text="Iniciar servicio" />
+
+    <Button
         android:id="@+id/btnNavegar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="backToLogin"
         android:text="Back" />
+
+    <TextView
+        android:id="@+id/tvData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="TextView" />
 
 </LinearLayout>

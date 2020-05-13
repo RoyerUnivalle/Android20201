@@ -18,6 +18,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
@@ -25,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import com.example.myapplication.servicios.*;
 
 public class Home extends AppCompatActivity {
 
@@ -35,6 +39,7 @@ public class Home extends AppCompatActivity {
     Pintar Obj = null;
     String DATA_URL = "https://invessoft.com/api/eventos/1";
     Consultar obj2 = null;
+    TextView dataResponseHttp;
 
 
     @Override
@@ -45,6 +50,7 @@ public class Home extends AppCompatActivity {
         showData = findViewById(R.id.tvData);
         tvContador = findViewById(R.id.tvContador);
         pintar = findViewById(R.id.btnPintar);
+        dataResponseHttp = findViewById(R.id.tvData);
         Bundle data = getIntent().getExtras();
         name = data.getString("name");
         passwd = data.getString("passwd");
@@ -65,6 +71,16 @@ public class Home extends AppCompatActivity {
     public void contar(View q){
         contador += 1;
         tvContador.setText("Contador: "+ contador);
+    }
+
+    public void llamarServicio(View q){
+        System.out.println("hola llamarServicio");
+        Intent servicio = new Intent(this, Servicio.class);
+        startService(servicio);
+        // enlace
+        //bindService(servicio);
+        //capturar un campo de la UI
+        //stopService(servicio);
     }
 
     public static String getMD5(String input) {
@@ -116,11 +132,13 @@ public class Home extends AppCompatActivity {
                         // https://docs.oracle.com/javaee/7/api/javax/json/JsonArray.html
                         // Display the first 500 characters of the response string.
                         System.out.println("Response is: "+ response.substring(0,500));
+                        dataResponseHttp.setText(response.substring(0,500));
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.println("error" + error);
+                dataResponseHttp.setText("error" + error);
             }
         });
 
@@ -184,7 +202,7 @@ public class Home extends AppCompatActivity {
         }
     }
 
-    class Consultar extends AsyncTask<Void,Void,Void>{
+    class Consultar extends AsyncTask<Void,String,Void>{
         @Override
         protected Void doInBackground(Void... voids) {
             URL urlConexion = null;
@@ -206,9 +224,12 @@ public class Home extends AppCompatActivity {
                 int connectionStatus = conexion.getResponseCode();
                 if(connectionStatus == HttpURLConnection.HTTP_OK){// LA CONEXION FUE EXITOSA
                     System.out.println("HOLA RESPUESTA "+conexion.getInputStream());
+                    publishProgress(conexion.getInputStream().toString());
+                    JSONObject jsonObject = new JSONObject();
                     //conexion.getInputStream();
                 }else {
                     System.out.println(connectionStatus);
+                    publishProgress("error: "+connectionStatus);
                 }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -219,8 +240,9 @@ public class Home extends AppCompatActivity {
         }
 
         @Override
-        protected void onProgressUpdate(Void... values) {
+        protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
+            dataResponseHttp.setText(values[0].toString());
         }
     }
 
