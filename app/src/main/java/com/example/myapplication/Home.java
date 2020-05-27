@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -40,6 +41,7 @@ public class Home extends AppCompatActivity {
     String DATA_URL = "https://invessoft.com/api/eventos/1";
     Consultar obj2 = null;
     TextView dataResponseHttp;
+    // BlankFragment2 frag;
 
 
     @Override
@@ -81,6 +83,14 @@ public class Home extends AppCompatActivity {
         //bindService(servicio);
         //capturar un campo de la UI
         //stopService(servicio);
+    }
+
+    public void iniciarFragment(View g){ // Single Page Application // SPA
+        BlankFragment2 frag = new BlankFragment2();
+        FragmentTransaction transtion = getSupportFragmentManager().beginTransaction();
+        transtion.replace(R.id.dynamicFrag,frag);
+        transtion.commit();
+
     }
 
     public static String getMD5(String input) {
